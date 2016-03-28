@@ -3,6 +3,7 @@ var express    = require('express');
 var mongoose   = require('mongoose');
 var morgan     = require('morgan');
 var bodyParser = require('body-parser');
+var yelp       = require('yelp');
 
 var app = express();
 require('dotenv').load();
