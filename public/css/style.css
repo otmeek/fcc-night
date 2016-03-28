@@ -12,22 +12,61 @@ h1, h2, h3, h4 {
 }
 
 .main {
-    height: 50%;
-    width: 50%;
-    overflow: auto;
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
+    margin-top: 100px;
 }
 
 input[type="text"] {
     background-color: #222;
     border-radius: 30px;
     border-color: #33CC99;
+    border-width: 2px;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.form-inline .form-group input {
+    width: 600px; /* needs media queries */
 }
 
 input[type="text"]:focus {
     border-color: rgba(51, 204, 153, 0.8);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(51, 204, 153, 0.6);
     outline: 0 none;
+    background-color: rgba(51, 204, 153, 0.1);
+}
+
+.btn-go {
+    background-color: #222;
+    color: white;
+    border-color: #33CC99;
+    border-width: 2px;
+    border-radius: 30px;
+    transition: background-color 0.3s;
+}
+
+.btn-go:hover {
+    background-color: rgba(51, 204, 153, 0.1);
+    color: white;
+    border-color: #33CC99;
+}
+
+.btn-go:active {
+    background-color: rgba(51, 204, 153, 0.4) !important;
+    color: white !important;
+    border-color: #33CC99 !important;
+}
+
+
+/* QUERIES */
+@media (max-width: 768px) {
+    .form-inline .form-group input {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .btn-go {
+        display: block;
+        width: 100%;
+        margin: 10px auto;
+    }
+    
 }
