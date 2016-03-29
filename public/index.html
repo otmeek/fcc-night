@@ -21,7 +21,7 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
     
 </head>
-<body ng-controller="mainController">
+<body ng-controller="mainController" id="mainController">
     
     
     
@@ -47,9 +47,9 @@
                 <form>
 
                     <div class="input-group">
-                        <input ng-model="searchTerm" type="text" class="form-control"  placeholder="Where are you?">
+                        <input id="inputSearch" ng-model="searchTerm" type="text" class="form-control"  placeholder="Where are you?" autocomplete='off'>
 
-                        <span class="input-group-btn">
+                        <span id="goBtn" class="input-group-btn">
                             <a ng-click="getResults()" class="btn btn-default">Go</a>
                         </span>
                     </div>
@@ -64,14 +64,7 @@
         <div class="row loading" ng-show="loading">
             <div class="col-xs-12">
                 
-                <div id="tout">
-                  <div>
-                    <div>
-                      <div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <div class="loader"></div>
 
             </div>
         </div>
@@ -113,6 +106,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <!-- custom scripts -->
     <script src="js/app.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>
