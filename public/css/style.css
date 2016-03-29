@@ -6,6 +6,11 @@ html, body {
     font-family: 'Roboto Condensed', sans-serif;
 }
 
+::selection {
+    background-color: #33CC99;
+    color: white;
+}
+
 h1, h2, h3, h4 {
     font-family: 'Pathway Gothic One', sans-serif;
     font-weight: 300;
@@ -27,19 +32,13 @@ input[type="text"] {
 }
 
 form {
-    margin-top: 30px;
+    margin-top: 10px;
     margin-bottom: 30px;
 }
 
 .input-group input {
     width: 100%;
 }
-
-/*
-.form-inline .form-group input {
-    width: 700px;  needs media queries 
-}
-*/
 
 input[type="text"]:focus {
     border-color: rgba(51, 204, 153, 0.8);
@@ -54,6 +53,7 @@ a.btn {
     border-right: 2px solid #33CC99;
     border-bottom: 2px solid #33CC99;
     border-top: 2px solid #33CC99;
+    border-left: 1px solid #33CC99;
     border-radius: 30px;
     transition: background-color 0.3s;
     height: 34px;
@@ -76,6 +76,16 @@ a.btn:active {
 
 
 /* results */
+.result {
+    margin-bottom: 10px;
+}
+
+.result a:link,
+.result a:visited,
+.result a:hover {
+    color: #33CC99;
+}
+
 .image {
     width: 100px;
     height: 90px;
@@ -117,7 +127,7 @@ a.btn:active {
 
 .row-footer a:link,
 .row-footer a:visited{
-    color: #ccc;
+    color: #33CC99;
 }
 
 .row-footer a:hover {

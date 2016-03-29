@@ -40,17 +40,17 @@
             </div>
             
         </div>
-        <div class="row">
+        <div class="row" ng-controller="mainController">
             
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-lg-offset-2">
         
                 <form>
 
                     <div class="input-group">
-                        <input type="text" class="form-control"  placeholder="Where are you?">
+                        <input ng-model="searchTerm" type="text" class="form-control"  placeholder="Where are you?">
 
                         <span class="input-group-btn">
-                            <a href="#" class="btn btn-default">Go</a>
+                            <a ng-click="getResults()" class="btn btn-default">Go</a>
                         </span>
                     </div>
 
@@ -61,35 +61,7 @@
         </div>
         
         
-        <!-- results -->
-        <div class="results">
-        
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-lg-offset-2 result">
-                    <div class="row">
-                        
-                        <!-- image -->
-                        <div class="col-xs-3 col-sm-2">
-                            <div class="image">
-                                <img src="//placehold.it/150x150">
-                            </div>
-                            <div class="going text-center">
-                                0 going
-                            </div>
-                        </div>
-                        
-
-                        <!-- text -->
-                        <div class="col-xs-9 col-sm-10">
-                            <h4>Name of pub goes here</h4>
-                            <p>Top review goes here, cut off at 200 char.</p>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-            
-        </div>
+        <results></results>
         
     </div>
     

@@ -17,6 +17,12 @@ app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
+// routes =============================================
+
+app.get('/*', function(req, res) {
+    res.redirect('/');
+});
+
 // listen =============================================
 var port = process.env.PORT || 8080;
 app.listen(port,  function () {
