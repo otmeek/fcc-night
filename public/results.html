@@ -5,7 +5,7 @@
             <!-- image -->
             <div class="col-xs-3 col-sm-2">
                 <div class="image">
-                    <img ng-src="{{ result.image }}">
+                    <img ng-src="{{ result.image || 'https://placehold.it/150x150' }}">
                 </div>
                 <div ng-click="addGoing($index)" class="going text-center">
                     {{ result.going || 0 }} going
