@@ -8,15 +8,16 @@
                     <img ng-src="{{ result.image }}">
                 </div>
                 <div ng-click="addGoing($index)" class="going text-center">
-                    {{ result.going }} going
+                    {{ result.going || 0 }} going
                 </div>
             </div>
 
 
             <!-- text -->
             <div class="col-xs-9 col-sm-10">
-                <h4><a href="#">{{ result.name }}</a></h4>
-                <p>{{ result.review }}</p>
+                <h4><a ng-href="{{ result.url }}">{{ result.name }}</a> 
+                    <small>Rating: {{ result.rating }}</small></h4>
+                <p>{{ result.text }}</p>
             </div>
 
         </div>

@@ -21,7 +21,7 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
     
 </head>
-<body>
+<body ng-controller="mainController">
     
     
     
@@ -40,7 +40,7 @@
             </div>
             
         </div>
-        <div class="row" ng-controller="mainController">
+        <div class="row">
             
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-lg-offset-2">
         
@@ -60,6 +60,21 @@
             
         </div>
         
+        <!-- LOADING -->
+        <div class="row loading" ng-show="loading">
+            <div class="col-xs-12">
+                
+                <div id="tout">
+                  <div>
+                    <div>
+                      <div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+        </div>
         
         <results></results>
         
