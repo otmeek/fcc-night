@@ -1,7 +1,6 @@
 // setup ==============================================
 var express         = require('express');
 var mongoose        = require('mongoose');
-var morgan          = require('morgan');
 var bodyParser      = require('body-parser');
 var Yelp            = require('yelp');
 var passport        = require('passport');
@@ -25,7 +24,6 @@ var yelp = new Yelp({
 mongoose.connect(process.env.MONGOLAB_URI);
 
 app.use(express.static(__dirname + '/public'));
-app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
@@ -57,8 +55,11 @@ passport.use(new TwitterStrategy({
                 return done(null, user);
             }
             else {
-                var newUser = new User();
-                newUser.id = profile.id;
+                var newUser         = new User();
+                newUser.id          = profile.id;
+                newUser.token       = token;
+                newUser.username    = profile.username;
+                newUser.displayName = profile.displayName;
                 
                 newUser.save(function(err) {
                     if(err) throw err;
@@ -88,7 +89,7 @@ var isLoggedIn = function (req, res, next) {
 	if (req.isAuthenticated())
 		return next();
 
-	res.send('Not logged in');
+	res.json(user: 'none');
 }
 
 app.get('/login/twitter', passport.authenticate('twitter'));
@@ -99,7 +100,7 @@ app.get('/login/twitter/callback', passport.authenticate('twitter', {
 }));
 
 app.get('/api/loggedin', isLoggedIn, function(req, res) {
-    res.send(req.user);
+    res.json(req.user);
 });
 
 app.get('/api/search', function(req, res) {
