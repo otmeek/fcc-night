@@ -12,6 +12,7 @@
         $scope.searchTerm = '';
         $scope.data = [];
         $scope.loading = false;
+        $scope.goingNo = [];
         
         $scope.getResults = function() {
             if($scope.searchTerm !== '') {
@@ -19,15 +20,23 @@
                 $scope.data = [];
                 $http.get('/api/search?term=' + $scope.searchTerm)
                     .success(function(results) {
-                        $scope.data = results;
                         $scope.loading = false;
+                        $scope.data = results;
+                        for(var i = 0; i < $scope.data.length; i++) {
+                            $scope.goingNo.push($scope.data[i].going);
+                        }
                     });
             }
         }
         
         $scope.addGoing = function(index) {
             // check if user is authenticated
-            $scope.data[index].going += 1;
+            if($scope.data[index].going > $scope.goingNo[index]) {
+                $scope.data[index].going -= 1;
+            }
+            else {
+                $scope.data[index].going += 1;
+            }
             // register in db
         }
 
