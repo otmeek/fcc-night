@@ -7,7 +7,7 @@
         $routeProvider
 
         .when('/', {
-            templateUrl: 'results.html'
+            templateUrl: 'default.html'
         })
         .when('/failedlogin', {
             templateUrl: 'loginfailed.html'
@@ -27,7 +27,7 @@
     .controller('mainController', ['$scope', '$http', function($scope, $http) {
 
         $scope.searchTerm = '';
-        $scope.data = [];
+        $scope.data = JSON.parse(localStorage.getItem('results')) || [];
         $scope.loading = false;
         $scope.goingNo = [];
         
@@ -72,13 +72,25 @@
 
     }])
     
-    .controller('loginController', ['$scope', function($scope) {
+    .controller('loginController', ['$scope', '$http', function($scope, $http) {
         
-        var results = localStorage.getItem('results');
-        $scope.data = [];
-        if(results != null) {
-            $scope.data = JSON.parse(results);
-        }
+//        $scope.loggedIn = false;
+//        
+//        $http.get('/api/loggedin').success(function(user) {
+//            if(user.user == 'none') {
+//                window.location = '/';
+//            }
+//            else {
+                $scope.loggedIn = true;
+                var results = localStorage.getItem('results');
+                $scope.data = [];
+                if(results != null) {
+                    $scope.data = JSON.parse(results);
+                }
+//                
+//            }
+//        });
+
         
     }])
     
