@@ -9,6 +9,7 @@ var session         = require('express-session');
 var uuid            = require('uuid');
 var cookieParser    = require('cookie-parser');
 var User            = require('./models/user');
+var Location        = require('./models/location');
 
 var app = express();
 require('dotenv').load();

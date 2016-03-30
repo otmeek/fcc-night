@@ -13,7 +13,8 @@
             templateUrl: 'loginfailed.html'
         })
         .when('/loginsuccessful', {
-            templateUrl: 'loginsuccessful.html'
+            templateUrl: 'loginsuccessful.html',
+            controller: 'loginController'
         })
         .otherwise({ redirectTo: '/' });
         
@@ -41,6 +42,8 @@
                         for(var i = 0; i < $scope.data.length; i++) {
                             $scope.goingNo.push($scope.data[i].going);
                         }
+                        // store results in localStorage
+                        localStorage.setItem('results', JSON.stringify(results));
                     });
             }
         }
@@ -62,11 +65,21 @@
                     console.log('redirect');
                     window.location = '/login/twitter';
                 }
-            })
+            });
             
             
         }
 
+    }])
+    
+    .controller('loginController', ['$scope', function($scope) {
+        
+        var results = localStorage.getItem('results');
+        $scope.data = [];
+        if(results != null) {
+            $scope.data = JSON.parse(results);
+        }
+        
     }])
     
     
