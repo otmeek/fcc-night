@@ -23,7 +23,7 @@
 
 
     //controllers
-    .controller('mainController', ['$scope', '$http', '$window' function($scope, $http, $window) {
+    .controller('mainController', ['$scope', '$http', function($scope, $http) {
 
         $scope.searchTerm = '';
         $scope.data = [];
@@ -59,7 +59,8 @@
                     // register in db
                 }
                 else {
-                    $window.location.href = '/login/twitter';
+                    console.log('redirect');
+                    window.location = '/login/twitter';
                 }
             })
             
