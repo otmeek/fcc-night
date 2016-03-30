@@ -7,7 +7,7 @@
         $routeProvider
 
         .when('/', {
-            templateUrl: 'default.html'
+            templateUrl: 'results.html'
         })
         .when('/failedlogin', {
             templateUrl: 'loginfailed.html'

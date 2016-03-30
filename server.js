@@ -65,6 +65,7 @@ passport.deserializeUser(function(obj, done) {
 // routes =============================================
 
 app.get('/login/twitter', passport.authenticate('twitter'));
+
 app.get('/login/twitter/callback', passport.authenticate('twitter', {
     successReturnToOrRedirect: '/loginsuccessful',
     failureRedirect: '/failedlogin'
