@@ -89,7 +89,7 @@ var isLoggedIn = function (req, res, next) {
 	if (req.isAuthenticated())
 		return next();
 
-	res.json(user: 'none');
+	res.json({user: 'none'});
 }
 
 app.get('/login/twitter', passport.authenticate('twitter'));
