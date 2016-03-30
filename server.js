@@ -1,9 +1,14 @@
 // setup ==============================================
-var express    = require('express');
-var mongoose   = require('mongoose');
-var morgan     = require('morgan');
-var bodyParser = require('body-parser');
-var Yelp       = require('yelp');
+var express         = require('express');
+var mongoose        = require('mongoose');
+var morgan          = require('morgan');
+var bodyParser      = require('body-parser');
+var Yelp            = require('yelp');
+var passport        = require('passport');
+var TwitterStrategy = require("passport-twitter").Strategy;
+var session         = require('express-session');
+var uuid            = require('uuid');
+var cookieParser    = require('cookie-parser')
 
 var app = express();
 require('dotenv').load();
@@ -24,7 +29,46 @@ app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
+passport.use(new TwitterStrategy({
+    consumerKey: process.env.TWITTER_KEY,
+    consumerSecret: process.env.TWITTER_SECRET,
+    callbackURL: "http://127.0.0.1:8080/login/twitter/callback"
+  },
+  function(token, tokenSecret, profile, done) {
+    // NOTE: You'll probably want to associate the Twitter profile with a
+    //       user record in your application's DB.
+    var user = profile;
+    return done(null, user);
+  }
+));
+
+app.use(cookieParser());
+app.use(session({
+    genid: function(req) {
+        return uuid.v4();
+    },
+    secret: process.env.EXPRESS_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
 // routes =============================================
+
+app.get('/login/twitter', passport.authenticate('twitter'));
+app.get('/login/twitter/callback', passport.authenticate('twitter', {
+    successReturnToOrRedirect: '/loginsuccessful',
+    failureRedirect: '/failedlogin'
+}));
 
 app.get('/api/search', function(req, res) {
     var location = req.query.term;
@@ -51,8 +95,9 @@ app.get('/api/search', function(req, res) {
     });
 });
 
-app.get('/*', function(req, res) {
-    res.redirect('/');
+app.all('/*', function(req, res, next) {
+    // Just send the index.html for other files to support HTML5Mode
+    res.sendFile('public/index.html', { root: __dirname });
 });
 
 // listen =============================================

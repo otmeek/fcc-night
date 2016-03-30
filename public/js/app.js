@@ -1,13 +1,29 @@
 (function() {
     
-    var app = angular.module('fccNight', []);
+    angular.module('fccNight', ['ngRoute'])
 
+    .config(function($routeProvider, $locationProvider) {
+        $locationProvider.html5Mode(true);
+        $routeProvider
 
+        .when('/', {
+            templateUrl: 'results.html'
+        })
+        .when('/failedlogin', {
+            templateUrl: 'loginfailed.html'
+        })
+        .when('/loginsuccessful', {
+            templateUrl: 'loginsuccessful.html'
+        })
+        .otherwise({ redirectTo: '/' });
+        
+    })
+    
 
 
 
     //controllers
-    app.controller('mainController', ['$scope', '$http', function($scope, $http) {
+    .controller('mainController', ['$scope', '$http', function($scope, $http) {
 
         $scope.searchTerm = '';
         $scope.data = [];
@@ -41,17 +57,5 @@
         }
 
     }]);
-    
-
-    
-
-
-    // directives
-    app.directive('results', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'results.html'
-        };
-    });
     
 })();
