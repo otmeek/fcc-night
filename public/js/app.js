@@ -14,9 +14,9 @@
         $scope.loading = false;
         
         $scope.getResults = function() {
-            $scope.loading = true;
-            $scope.data = [];
             if($scope.searchTerm !== '') {
+                $scope.loading = true;
+                $scope.data = [];
                 $http.get('/api/search?term=' + $scope.searchTerm)
                     .success(function(results) {
                         $scope.data = results;
