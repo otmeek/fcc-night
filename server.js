@@ -9,6 +9,7 @@ var TwitterStrategy = require("passport-twitter").Strategy;
 var session         = require('express-session');
 var uuid            = require('uuid');
 var cookieParser    = require('cookie-parser');
+var User            = require('./models/user');
 
 var app = express();
 require('dotenv').load();
@@ -30,11 +31,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+    console.log(user);
+    done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(id, done) {
+    console.log(id);
+    User.findById(id, function(err, user){
+        done(null, user);
+    });
 });
 
 passport.use(new TwitterStrategy({
@@ -43,7 +48,24 @@ passport.use(new TwitterStrategy({
     callbackURL: process.env.APP_URL + '/login/twitter/callback'
   }, function(token, tokenSecret, profile, done) {
     process.nextTick(function () {
-        return done(null, profile);
+        console.log(profile);
+        User.findOne({ id: profile.id }, function(err, user) {
+            if(err)
+                return done(err);
+            
+            if(user) {
+                return done(null, user);
+            }
+            else {
+                var newUser = new User();
+                newUser.id = profile.id;
+                
+                newUser.save(function(err) {
+                    if(err) throw err;
+                    return done(null, newUser);
+                });
+            }
+        });
     });
   }
 ));
@@ -61,23 +83,23 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // routes =============================================
-var isAuthenticated = function (req, res, next) {
+var isLoggedIn = function (req, res, next) {
 
 	if (req.isAuthenticated())
 		return next();
 
-	res.json({ user : 'none'});
+	res.send('Not logged in');
 }
 
 app.get('/login/twitter', passport.authenticate('twitter'));
 
 app.get('/login/twitter/callback', passport.authenticate('twitter', {
-    successReturnToOrRedirect: '/api/loggedin',
+    successReturnToOrRedirect: '/loginsuccessful',
     failureRedirect: '/failedlogin'
 }));
 
-app.get('/api/loggedin', isAuthenticated, function(req, res) {
-    res.send({user: req.user.usename});
+app.get('/api/loggedin', isLoggedIn, function(req, res) {
+    res.send(req.user);
 });
 
 app.get('/api/search', function(req, res) {
