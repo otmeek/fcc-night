@@ -29,12 +29,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 passport.serializeUser(function(user, done) {
-    console.log(user);
     done(null, user);
 });
 
 passport.deserializeUser(function(id, done) {
-    console.log(id);
     User.findById(id, function(err, user){
         done(null, user);
     });
@@ -46,7 +44,6 @@ passport.use(new TwitterStrategy({
     callbackURL: process.env.APP_URL + '/login/twitter/callback'
   }, function(token, tokenSecret, profile, done) {
     process.nextTick(function () {
-        console.log(profile);
         User.findOne({ id: profile.id }, function(err, user) {
             if(err)
                 return done(err);
@@ -100,7 +97,7 @@ app.get('/login/twitter/callback', passport.authenticate('twitter', {
 }));
 
 app.get('/api/loggedin', isLoggedIn, function(req, res) {
-    res.json(req.user);
+    res.json({ user: req.user.id });
 });
 
 app.get('/api/search', function(req, res) {

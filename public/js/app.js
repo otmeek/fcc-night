@@ -23,7 +23,7 @@
 
 
     //controllers
-    .controller('mainController', ['$scope', '$http', function($scope, $http) {
+    .controller('mainController', ['$scope', '$http', '$window' function($scope, $http, $window) {
 
         $scope.searchTerm = '';
         $scope.data = [];
@@ -47,13 +47,23 @@
         
         $scope.addGoing = function(index) {
             // check if user is authenticated
-            if($scope.data[index].going > $scope.goingNo[index]) {
-                $scope.data[index].going -= 1;
-            }
-            else {
-                $scope.data[index].going += 1;
-            }
-            // register in db
+            $http.get('/api/loggedin').success(function(user) {
+                if(user.user != 'none') {
+                    if($scope.data[index].going > $scope.goingNo[index]) {
+                        $scope.data[index].going -= 1;
+                    }
+                    else {
+                        $scope.data[index].going += 1;
+                    }
+                    
+                    // register in db
+                }
+                else {
+                    $window.location.href = '/login/twitter';
+                }
+            })
+            
+            
         }
 
     }])
