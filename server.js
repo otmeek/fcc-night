@@ -32,7 +32,7 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_KEY,
     consumerSecret: process.env.TWITTER_SECRET,
-    callbackURL: "http://127.0.0.1:8080/login/twitter/callback"
+    callbackURL: process.env.APP_URL + '/login/twitter/callback'
   },
   function(token, tokenSecret, profile, done) {
     // NOTE: You'll probably want to associate the Twitter profile with a
