@@ -7,7 +7,7 @@
         $routeProvider
 
         .when('/', {
-            templateUrl: 'results.html'
+            templateUrl: 'default.html'
         })
         .when('/failedlogin', {
             templateUrl: 'loginfailed.html'
@@ -56,6 +56,17 @@
             // register in db
         }
 
-    }]);
+    }])
+    
+    
+    
+    // directives
+    .directive('results', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'results.html'
+        }
+        
+    });
     
 })();
