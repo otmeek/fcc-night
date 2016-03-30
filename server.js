@@ -8,7 +8,7 @@ var passport        = require('passport');
 var TwitterStrategy = require("passport-twitter").Strategy;
 var session         = require('express-session');
 var uuid            = require('uuid');
-var cookieParser    = require('cookie-parser')
+var cookieParser    = require('cookie-parser');
 
 var app = express();
 require('dotenv').load();
@@ -29,16 +29,22 @@ app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
 passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_KEY,
     consumerSecret: process.env.TWITTER_SECRET,
     callbackURL: process.env.APP_URL + '/login/twitter/callback'
-  },
-  function(token, tokenSecret, profile, done) {
-    // NOTE: You'll probably want to associate the Twitter profile with a
-    //       user record in your application's DB.
-    var user = profile;
-    return done(null, user);
+  }, function(token, tokenSecret, profile, done) {
+    process.nextTick(function () {
+        return done(null, profile);
+    });
   }
 ));
 
@@ -54,22 +60,25 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
 // routes =============================================
+var isAuthenticated = function (req, res, next) {
+
+	if (req.isAuthenticated())
+		return next();
+
+	res.json({ user : 'none'});
+}
 
 app.get('/login/twitter', passport.authenticate('twitter'));
 
 app.get('/login/twitter/callback', passport.authenticate('twitter', {
-    successReturnToOrRedirect: '/loginsuccessful',
+    successReturnToOrRedirect: '/api/loggedin',
     failureRedirect: '/failedlogin'
 }));
+
+app.get('/api/loggedin', isAuthenticated, function(req, res) {
+    res.send({user: req.user.usename});
+});
 
 app.get('/api/search', function(req, res) {
     var location = req.query.term;
