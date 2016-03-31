@@ -129,34 +129,6 @@ app.get('/api/search', function(req, res) {
     });
 });
 
-function getLocationGoings(id) {
-    
-    // we only send the goings for today
-    var today = new Date();
-    
-    Location.find({
-        id: id
-    }).lean().exec(function(err, doc) {
-        if(err) throw err;
-        console.log(doc);
-        if(doc.length > 0){
-            var going = 0;
-            for(var i = 0; i < doc[0].going.length; i++) {
-                var goingDate = new Date(doc[0].going[i].going);
-                if(goingDate.setHours(0,0,0,0) == today.setHours(0,0,0,0)) {
-                    // date is today's date
-                    going += 1;
-                }
-            }
-
-            return going;
-        }
-        else {
-            return 0;
-        }
-    });
-}
-
 app.post('/api/going', function(req, res) {
     
     // need to check if user is already going today
@@ -206,7 +178,7 @@ app.post('/api/going', function(req, res) {
 });
 
 app.post('/api/removegoing', function(req, res) {
-    
+    var inputDate = new Date(req.body.going).setHours(0,0,0,0);
     Location.update(
         {
             id: req.body.id
@@ -216,13 +188,14 @@ app.post('/api/removegoing', function(req, res) {
             {
                 going:
                 {
-                    going: req.body.going,
+                    going: inputDate,
                     user: req.body.user
                 }
             }
         }, function(err, doc) {
             if(err) throw err;
             res.json(doc);
+            console.log(doc)
         }
     )
     

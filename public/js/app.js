@@ -65,7 +65,8 @@
             // check if user is authenticated
             $http.get('/api/loggedin').success(function(user) {
                 
-                $scope.userid = user.user;
+                $scope.userid = user.user || 'empty';
+                //$scope.userid = 'empty';
                 
                 $scope.formData.id = $scope.data[index].id;
                 $scope.formData.going = $scope.date;
@@ -76,7 +77,7 @@
                     if($scope.data[index].going > $scope.goingNo[index]) {
                         
                         // remove from db
-                        
+                        console.log($scope.formData)
                         $http.post('/api/removegoing', $scope.formData)
                             .success(function(data) {
                             
@@ -94,6 +95,7 @@
                         // add to db
                         
                         // post request
+                        console.log($scope.formData)
                         $http.post('/api/going', $scope.formData)
                             .success(function(data) {
                             
@@ -102,11 +104,10 @@
                                     $scope.data[index].going += 1;
                                 }
                                 else {
-                                    
+                                    console.log($scope.formData)
                                     $http.post('/api/removegoing', $scope.formData)
                                         .success(function(data) {
                                             $scope.data[index].going -= 1;
-
                                         })
                                         .error(function(error) {
                                             console.log('Error: ' + error);
