@@ -126,7 +126,14 @@ app.get('/api/search', function(req, res) {
     });
 });
 
-// app.post('/api/going', function(req, res))
+app.post('/api/going', function(req, res) {
+    var location = new Location({
+        id: req.body.id
+    });
+    
+    console.log(req.body);
+    res.send(req.body);
+});
 
 app.all('/*', function(req, res, next) {
     // Just send the index.html for other files to support HTML5Mode

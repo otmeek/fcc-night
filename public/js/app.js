@@ -100,22 +100,22 @@
     
     .controller('loginController', ['$scope', '$http', function($scope, $http) {
         
-//        $scope.loggedIn = false;
-//        
-//        $http.get('/api/loggedin').success(function(user) {
-//            if(user.user == 'none') {
-//                window.location = '/';
-//            }
-//            else {
+        $scope.loggedIn = false;
+        
+        $http.get('/api/loggedin').success(function(user) {
+            if(user.user == 'none') {
+                window.location = '/';
+            }
+            else {
                 $scope.loggedIn = true;
                 var results = localStorage.getItem('results');
                 $scope.data = [];
                 if(results != null) {
                     $scope.data = JSON.parse(results);
                 }
-//                
-//            }
-//        });
+                
+            }
+        });
 
         
     }])
