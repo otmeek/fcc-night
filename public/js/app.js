@@ -39,22 +39,26 @@
         $scope.formData = {};
         $scope.userid = '';
         
+        getGoing();
+        
         console.log($scope.data[0].going);
         
         $scope.getResults = function() {
+            
+            // make sure search bar isn't empty
             if($scope.searchTerm !== '') {
+                
+                // turn on loading animation
                 $scope.loading = true;
-                $scope.data = [];
+                
                 $http.get('/api/search?term=' + $scope.searchTerm)
                     .success(function(results) {
+                    
                         $scope.loading = false;
                         $scope.data = results;
                     
-                        for(var i = 0; i < $scope.data.length; i++) {
-                            //$scope.data[i].going = $scope.getGoing($scope.data[i].id);
-                            console.log($scope.data[i].going);
-                            $scope.goingNo.push($scope.data[i].going);
-                        }
+                        getGoing();
+                    
                         // store results in localStorage
                         localStorage.setItem('results', JSON.stringify(results));
                     })
@@ -64,12 +68,19 @@
             }
         }
         
-        $scope.getGoing = function(id) {
-            $http.get('/api/getgoing/' + id)
-                .success(function(data) {
-                    console.log(data.goings);
-                    return data.goings;
+        function getGoing() {
+            if($scope.data.length > 0) {
+                $scope.data.forEach(function(obj) {
+                    var id = obj.id;
+
+                    $http.get('/api/getgoing/' + id)
+                    .success(function(data) {
+                        obj.going = data.goings;
+                        $scope.goingNo.push(obj.going);
+                    });
+
                 });
+            }
         }
         
         $scope.addGoing = function(index) {
