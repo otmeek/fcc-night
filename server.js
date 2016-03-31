@@ -110,6 +110,9 @@ app.get('/api/search', function(req, res) {
         var results = [];
         
         for(var i = 0; i < data.businesses.length; i++) {
+            
+            // query db to find going for each result
+            
             var obj = {
                 rating: data.businesses[i].rating,
                 name: data.businesses[i].name,
@@ -117,7 +120,7 @@ app.get('/api/search', function(req, res) {
                 text: data.businesses[i].snippet_text,
                 image: data.businesses[i].image_url,
                 id: data.businesses[i].id,
-                going: 0 //change to db query
+                going: 0
             };
             results.push(obj);
         }
@@ -126,29 +129,79 @@ app.get('/api/search', function(req, res) {
     });
 });
 
-app.post('/api/going', function(req, res) {
-
-    Location.update(
-        {
-            id: req.body.id
-        },
-        {
-            id: req.body.id,
-            $push: 
-            {
-                going: 
-                {
-                    going: req.body.going,
-                    user: req.body.user
+function getLocationGoings(id) {
+    
+    // we only send the goings for today
+    var today = new Date();
+    
+    Location.find({
+        id: id
+    }).lean().exec(function(err, doc) {
+        if(err) throw err;
+        console.log(doc);
+        if(doc.length > 0){
+            var going = 0;
+            for(var i = 0; i < doc[0].going.length; i++) {
+                var goingDate = new Date(doc[0].going[i].going);
+                if(goingDate.setHours(0,0,0,0) == today.setHours(0,0,0,0)) {
+                    // date is today's date
+                    going += 1;
                 }
             }
-        },
-        {
-            upsert: true
-        }, function(err, doc) {
-            if(err) throw err;
-            res.json(doc);
+
+            return going;
+        }
+        else {
+            return 0;
+        }
     });
+}
+
+app.post('/api/going', function(req, res) {
+    
+    // need to check if user is already going today
+    var today = new Date().setHours(0,0,0,0);
+    var inputDate = new Date(req.body.going).setHours(0,0,0,0);
+    
+    Location.find({ 
+        id: req.body.id,
+        going: {
+            $in: {
+                going: today,
+                user: req.body.user
+            }
+        }
+    }).lean().exec(function(err, doc) {
+        if(err) throw err;
+        if(doc.length == 0) {
+            
+            Location.update(
+            {
+                id: req.body.id
+            },
+            {
+                id: req.body.id,
+                $push: 
+                {
+                    going: 
+                    {
+                        going: inputDate,
+                        user: req.body.user
+                    }
+                }
+            },
+            {
+                upsert: true
+            }, function(err, doc) {
+                if(err) throw err;
+                res.json({ message: 'done' });
+            });
+        }
+        else {
+            res.json({ message: 'error' });
+        }
+    });
+
     
 });
 

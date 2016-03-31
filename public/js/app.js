@@ -74,14 +74,16 @@
                 if($scope.userid != 'none') {
                     // user is logged on
                     if($scope.data[index].going > $scope.goingNo[index]) {
-                        // if user has added to going, remove going when clicking again
-                        $scope.data[index].going -= 1;
                         
                         // remove from db
                         
                         $http.post('/api/removegoing', $scope.formData)
                             .success(function(data) {
                                 $scope.formData = {};
+                            
+                                // if user has added to going, remove going when clicking again
+                                $scope.data[index].going -= 1;
+                            
                             })
                             .error(function(error) {
                                 console.log('Error: ' + error);
@@ -89,14 +91,31 @@
                         
                     }
                     else {
-                        $scope.data[index].going += 1;
-                        
+                                                
                         // add to db
                         
                         // post request
                         $http.post('/api/going', $scope.formData)
                             .success(function(data) {
-                                $scope.formData = {};
+                            
+                                if(data.message == 'done') {
+                                    $scope.formData = {};
+                                    $scope.data[index].going += 1;
+                                }
+                                else if(data.message == 'error') {
+                                    
+                                    $http.post('/api/removegoing', $scope.formData)
+                                        .success(function(data) {
+                                            $scope.formData = {};
+                                            $scope.data[index].going -= 1;
+
+                                        })
+                                        .error(function(error) {
+                                            console.log('Error: ' + error);
+                                        });
+                                    
+                                    
+                                }
                             })
                             .error(function(error) {
                                 console.log('Error: ' + error);
