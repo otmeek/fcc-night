@@ -166,10 +166,10 @@ app.post('/api/going', function(req, res) {
     Location.find({ 
         id: req.body.id,
         going: {
-            $in: {
+            $in: [{
                 going: today,
                 user: req.body.user
-            }
+            }]
         }
     }).lean().exec(function(err, doc) {
         if(err) throw err;
