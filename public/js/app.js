@@ -59,13 +59,14 @@
                 $scope.userid = user.user;
                 if($scope.userid != 'none') {
                     // user is logged on
+                    console.log($scope.goingNo[index]);
                     if($scope.data[index].going > $scope.goingNo[index]) {
                         // if user has added to going, remove going when clicking again
                         $scope.data[index].going -= 1;
                         
                         // remove from db
                     }
-                    else {
+                    else if($scope.data[index].going <= $scope.goingNo[index]) {
                         $scope.data[index].going += 1;
                         
                         // add to db
