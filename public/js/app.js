@@ -30,6 +30,12 @@
         $scope.data = JSON.parse(localStorage.getItem('results')) || [];
         $scope.loading = false;
         $scope.goingNo = [];
+        // populate goingNo if there are results stored in localStorage
+        if($scope.data.length > 0) {
+            for(var j = 0; j < $scope.data.length; j++) {
+                $scope.goingNo.push($scope.data[j].going);
+            }
+        }
         $scope.formData = {};
         $scope.userid = '';
         
@@ -66,7 +72,7 @@
                         
                         // remove from db
                     }
-                    else if($scope.data[index].going <= $scope.goingNo[index]) {
+                    else {
                         $scope.data[index].going += 1;
                         
                         // add to db
