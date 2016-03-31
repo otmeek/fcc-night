@@ -119,8 +119,7 @@ app.get('/api/search', function(req, res) {
                 url: data.businesses[i].url,
                 text: data.businesses[i].snippet_text,
                 image: data.businesses[i].image_url,
-                id: data.businesses[i].id,
-                going: 0
+                id: data.businesses[i].id
             };
             results.push(obj);
         }
@@ -129,11 +128,24 @@ app.get('/api/search', function(req, res) {
     });
 });
 
+app.get('/api/getgoing/:ID', function(req, res) {
+    var id = req.params.ID;
+    var today = new Date().setHours(0,0,0,0);
+    console.log(today);
+    console.log(id);
+    Location.find({
+        id: id,
+        "going.going" : '1459382400000'
+    }, function(err, doc) {
+        if(err) throw err;
+        res.send(doc);
+    });
+});
+
 app.post('/api/going', function(req, res) {
     
     // need to check if user is already going today
     var today = new Date().setHours(0,0,0,0);
-    var inputDate = new Date(req.body.going).setHours(0,0,0,0);
     
     Location.find({ 
         id: req.body.id,
@@ -157,7 +169,7 @@ app.post('/api/going', function(req, res) {
                 {
                     going: 
                     {
-                        going: inputDate,
+                        going: today,
                         user: req.body.user
                     }
                 }

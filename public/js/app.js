@@ -40,6 +40,14 @@
         $scope.userid = '';
         $scope.date = new Date();
         
+        // populate going for each obj
+        for(obj in $scope.data) {
+            $http.get('/api/getgoing/' + obj.id)
+                .success(function(data) {
+                
+                });
+        }
+        
         $scope.getResults = function() {
             if($scope.searchTerm !== '') {
                 $scope.loading = true;
@@ -77,7 +85,6 @@
                     if($scope.data[index].going > $scope.goingNo[index]) {
                         
                         // remove from db
-                        console.log($scope.formData)
                         $http.post('/api/removegoing', $scope.formData)
                             .success(function(data) {
                             
@@ -95,7 +102,6 @@
                         // add to db
                         
                         // post request
-                        console.log($scope.formData)
                         $http.post('/api/going', $scope.formData)
                             .success(function(data) {
                             
@@ -104,7 +110,6 @@
                                     $scope.data[index].going += 1;
                                 }
                                 else {
-                                    console.log($scope.formData)
                                     $http.post('/api/removegoing', $scope.formData)
                                         .success(function(data) {
                                             $scope.data[index].going -= 1;
