@@ -82,15 +82,17 @@
                         $scope.formData.going = date;
                         $scope.formData.user = $scope.userid;
                         
-                        console.log(JSON.stringify($scope.formData));
+                        if(JSON.stringify($scope.formData) != 0) {
                         
-//                        $http.post('/api/going', $scope.formData)
-//                            .success(function(data) {
-//                                $scope.formData = {};
-//                            })
-//                            .error(function(error) {
-//                                console.log('Error: ' + error);
-//                            })
+                            // post request
+                            $http.post('/api/going', $scope.formData)
+                                .success(function(data) {
+                                    $scope.formData = {};
+                                })
+                                .error(function(error) {
+                                    console.log('Error: ' + error);
+                                });
+                        }
                     }
 
                 }

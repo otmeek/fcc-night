@@ -127,12 +127,29 @@ app.get('/api/search', function(req, res) {
 });
 
 app.post('/api/going', function(req, res) {
-    var location = new Location({
-        id: req.body.id
+
+    Location.update(
+        {
+            id: req.body.id
+        },
+        {
+            id: req.body.id,
+            $push: 
+            {
+                going: 
+                {
+                    going: req.body.going,
+                    user: req.body.user
+                }
+            }
+        },
+        {
+            upsert: true
+        }, function(err, doc) {
+            if(err) throw err;
+            res.json(doc);
     });
     
-    console.log(req.body);
-    res.send(req.body);
 });
 
 app.all('/*', function(req, res, next) {

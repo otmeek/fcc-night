@@ -6,7 +6,6 @@ var locationSchema = mongoose.Schema({
     id: String,
     going: [
         {
-            id: String,
             going: String,
             user: String
         }
