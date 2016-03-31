@@ -38,15 +38,8 @@
         }
         $scope.formData = {};
         $scope.userid = '';
-        $scope.date = new Date();
         
-        // populate going for each obj
-        for(obj in $scope.data) {
-            $http.get('/api/getgoing/' + obj.id)
-                .success(function(data) {
-                
-                });
-        }
+        console.log($scope.data[0].going);
         
         $scope.getResults = function() {
             if($scope.searchTerm !== '') {
@@ -56,7 +49,10 @@
                     .success(function(results) {
                         $scope.loading = false;
                         $scope.data = results;
+                    
                         for(var i = 0; i < $scope.data.length; i++) {
+                            //$scope.data[i].going = $scope.getGoing($scope.data[i].id);
+                            console.log($scope.data[i].going);
                             $scope.goingNo.push($scope.data[i].going);
                         }
                         // store results in localStorage
@@ -68,16 +64,23 @@
             }
         }
         
+        $scope.getGoing = function(id) {
+            $http.get('/api/getgoing/' + id)
+                .success(function(data) {
+                    console.log(data.goings);
+                    return data.goings;
+                });
+        }
+        
         $scope.addGoing = function(index) {
             
             // check if user is authenticated
-            $http.get('/api/loggedin').success(function(user) {
+           // $http.get('/api/loggedin').success(function(user) {
                 
-                $scope.userid = user.user || 'empty';
-                //$scope.userid = 'empty';
+                //$scope.userid = user.user || 'empty';
+                $scope.userid = 'empty';
                 
                 $scope.formData.id = $scope.data[index].id;
-                $scope.formData.going = $scope.date;
                 $scope.formData.user = $scope.userid;
                 
                 if($scope.userid != 'none') {
@@ -130,7 +133,7 @@
                 else {
                     window.location = '/login/twitter';
                 }
-            });
+         //   });
             
             
         }
@@ -138,23 +141,23 @@
     }])
     
     .controller('loginController', ['$scope', '$http', function($scope, $http) {
-        
-        $scope.loggedIn = false;
-        
-        $http.get('/api/loggedin').success(function(user) {
-            if(user.user == 'none') {
-                window.location = '/';
-            }
-            else {
+//        
+//        $scope.loggedIn = false;
+//        
+//        $http.get('/api/loggedin').success(function(user) {
+//            if(user.user == 'none') {
+//                window.location = '/';
+//            }
+//            else {
                 $scope.loggedIn = true;
                 var results = localStorage.getItem('results');
                 $scope.data = [];
                 if(results != null) {
                     $scope.data = JSON.parse(results);
                 }
-                
-            }
-        });
+//                
+//            }
+//        });
 
         
     }])

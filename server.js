@@ -119,7 +119,8 @@ app.get('/api/search', function(req, res) {
                 url: data.businesses[i].url,
                 text: data.businesses[i].snippet_text,
                 image: data.businesses[i].image_url,
-                id: data.businesses[i].id
+                id: data.businesses[i].id,
+                going: 0
             };
             results.push(obj);
         }
@@ -135,10 +136,10 @@ app.get('/api/getgoing/:ID', function(req, res) {
     console.log(id);
     Location.find({
         id: id,
-        "going.going" : '1459382400000'
+        "going.going" : today
     }, function(err, doc) {
         if(err) throw err;
-        res.send(doc);
+        res.json({ goings: doc.length });
     });
 });
 
