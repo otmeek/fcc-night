@@ -79,7 +79,6 @@
                         
                         $http.post('/api/removegoing', $scope.formData)
                             .success(function(data) {
-                                $scope.formData = {};
                             
                                 // if user has added to going, remove going when clicking again
                                 $scope.data[index].going -= 1;
@@ -102,11 +101,10 @@
                                     $scope.formData = {};
                                     $scope.data[index].going += 1;
                                 }
-                                else if(data.message == 'error') {
+                                else {
                                     
                                     $http.post('/api/removegoing', $scope.formData)
                                         .success(function(data) {
-                                            $scope.formData = {};
                                             $scope.data[index].going -= 1;
 
                                         })
