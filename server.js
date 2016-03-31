@@ -152,6 +152,29 @@ app.post('/api/going', function(req, res) {
     
 });
 
+app.post('/api/removegoing', function(req, res) {
+    
+    Location.update(
+        {
+            id: req.body.id
+        },
+        {
+            $pull:
+            {
+                going:
+                {
+                    going: req.body.going,
+                    user: req.body.user
+                }
+            }
+        }, function(err, doc) {
+            if(err) throw err;
+            res.json(doc);
+        }
+    )
+    
+});
+
 app.all('/*', function(req, res, next) {
     // Just send the index.html for other files to support HTML5Mode
     res.sendFile('public/index.html', { root: __dirname });

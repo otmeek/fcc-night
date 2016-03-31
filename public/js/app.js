@@ -38,6 +38,7 @@
         }
         $scope.formData = {};
         $scope.userid = '';
+        $scope.date = new Date();
         
         $scope.getResults = function() {
             if($scope.searchTerm !== '') {
@@ -60,44 +61,50 @@
         }
         
         $scope.addGoing = function(index) {
+            
             // check if user is authenticated
             $http.get('/api/loggedin').success(function(user) {
+                
                 $scope.userid = user.user;
+                
+                $scope.formData.id = $scope.data[index].id;
+                $scope.formData.going = $scope.date;
+                $scope.formData.user = $scope.userid;
+                
                 if($scope.userid != 'none') {
                     // user is logged on
-                    console.log($scope.goingNo[index]);
                     if($scope.data[index].going > $scope.goingNo[index]) {
                         // if user has added to going, remove going when clicking again
                         $scope.data[index].going -= 1;
                         
                         // remove from db
+                        
+                        $http.post('/api/removegoing', $scope.formData)
+                            .success(function(data) {
+                                $scope.formData = {};
+                            })
+                            .error(function(error) {
+                                console.log('Error: ' + error);
+                            });
+                        
                     }
                     else {
                         $scope.data[index].going += 1;
                         
                         // add to db
                         
-                        $scope.formData.id = $scope.data[index].id;
-                        var date = new Date();
-                        $scope.formData.going = date;
-                        $scope.formData.user = $scope.userid;
-                        
-                        if(JSON.stringify($scope.formData) != 0) {
-                        
-                            // post request
-                            $http.post('/api/going', $scope.formData)
-                                .success(function(data) {
-                                    $scope.formData = {};
-                                })
-                                .error(function(error) {
-                                    console.log('Error: ' + error);
-                                });
-                        }
+                        // post request
+                        $http.post('/api/going', $scope.formData)
+                            .success(function(data) {
+                                $scope.formData = {};
+                            })
+                            .error(function(error) {
+                                console.log('Error: ' + error);
+                            });
                     }
 
                 }
                 else {
-                    console.log('redirect');
                     window.location = '/login/twitter';
                 }
             });
