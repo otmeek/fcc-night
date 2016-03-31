@@ -190,7 +190,7 @@ app.post('/api/going', function(req, res) {
 });
 
 app.post('/api/removegoing', function(req, res) {
-    var inputDate = new Date(req.body.going).setHours(0,0,0,0);
+    var today = new Date().setHours(0,0,0,0);
     Location.update(
         {
             id: req.body.id
@@ -200,7 +200,7 @@ app.post('/api/removegoing', function(req, res) {
             {
                 going:
                 {
-                    going: inputDate,
+                    going: today,
                     user: req.body.user
                 }
             }
