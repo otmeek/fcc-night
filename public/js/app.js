@@ -88,8 +88,8 @@
             // check if user is authenticated
             $http.get('/api/loggedin').success(function(user) {
                 
-                //$scope.userid = user.user || 'empty';
-                $scope.userid = 'empty';
+                $scope.userid = user.user || 'empty';
+                //$scope.userid = 'empty';
                 
                 $scope.formData.id = $scope.data[index].id;
                 $scope.formData.user = $scope.userid;
