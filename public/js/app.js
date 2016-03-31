@@ -27,9 +27,11 @@
     .controller('mainController', ['$scope', '$http', function($scope, $http) {
 
         $scope.searchTerm = '';
-        $scope.data = JSON.parse(localStorage.getItem('results')) || [];
+        $scope.data = JSON.parse(sessionStorage.getItem('results')) || [];
         $scope.loading = false;
         $scope.goingNo = [];
+        $scope.formData = {};
+        $scope.userid = '';
         
         $scope.getResults = function() {
             if($scope.searchTerm !== '') {
@@ -42,8 +44,11 @@
                         for(var i = 0; i < $scope.data.length; i++) {
                             $scope.goingNo.push($scope.data[i].going);
                         }
-                        // store results in localStorage
-                        localStorage.setItem('results', JSON.stringify(results));
+                        // store results in sessionStorage
+                        sessionStorage.setItem('results', JSON.stringify(results));
+                    })
+                    .error(function(error) {
+                        console.log('Error: ' + error);
                     });
             }
         }
@@ -51,15 +56,36 @@
         $scope.addGoing = function(index) {
             // check if user is authenticated
             $http.get('/api/loggedin').success(function(user) {
-                if(user.user != 'none') {
+                $scope.userid = user.user;
+                if($scope.userid != 'none') {
+                    // user is logged on
                     if($scope.data[index].going > $scope.goingNo[index]) {
+                        // if user has added to going, remove going when clicking again
                         $scope.data[index].going -= 1;
+                        
+                        // remove from db
                     }
                     else {
                         $scope.data[index].going += 1;
+                        
+                        // add to db
+                        
+                        $scope.formData.id = $scope.data[index].id;
+                        var date = new Date();
+                        $scope.formData.going = date;
+                        $scope.formData.user = $scope.userid;
+                        
+                        console.log(JSON.stringify($scope.formData));
+                        
+//                        $http.post('/api/going', $scope.formData)
+//                            .success(function(data) {
+//                                $scope.formData = {};
+//                            })
+//                            .error(function(error) {
+//                                console.log('Error: ' + error);
+//                            })
                     }
-                    
-                    // register in db
+
                 }
                 else {
                     console.log('redirect');
@@ -82,7 +108,7 @@
 //            }
 //            else {
                 $scope.loggedIn = true;
-                var results = localStorage.getItem('results');
+                var results = sessionStorage.getItem('results');
                 $scope.data = [];
                 if(results != null) {
                     $scope.data = JSON.parse(results);

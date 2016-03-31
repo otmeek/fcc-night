@@ -4,7 +4,7 @@ var locationSchema = mongoose.Schema({
     
     
     id: String,
-    going: Number
+    going: []
     
     
 });

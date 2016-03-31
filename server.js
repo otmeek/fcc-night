@@ -126,6 +126,8 @@ app.get('/api/search', function(req, res) {
     });
 });
 
+app.post('/api/going')
+
 app.all('/*', function(req, res, next) {
     // Just send the index.html for other files to support HTML5Mode
     res.sendFile('public/index.html', { root: __dirname });
