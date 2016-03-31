@@ -27,7 +27,7 @@
     .controller('mainController', ['$scope', '$http', function($scope, $http) {
 
         $scope.searchTerm = '';
-        $scope.data = JSON.parse(sessionStorage.getItem('results')) || [];
+        $scope.data = JSON.parse(localStorage.getItem('results')) || [];
         $scope.loading = false;
         $scope.goingNo = [];
         $scope.formData = {};
@@ -44,8 +44,8 @@
                         for(var i = 0; i < $scope.data.length; i++) {
                             $scope.goingNo.push($scope.data[i].going);
                         }
-                        // store results in sessionStorage
-                        sessionStorage.setItem('results', JSON.stringify(results));
+                        // store results in localStorage
+                        localStorage.setItem('results', JSON.stringify(results));
                     })
                     .error(function(error) {
                         console.log('Error: ' + error);
@@ -108,7 +108,7 @@
 //            }
 //            else {
                 $scope.loggedIn = true;
-                var results = sessionStorage.getItem('results');
+                var results = localStorage.getItem('results');
                 $scope.data = [];
                 if(results != null) {
                     $scope.data = JSON.parse(results);
