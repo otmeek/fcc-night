@@ -27,7 +27,8 @@
     .controller('mainController', ['$scope', '$http', function($scope, $http) {
 
         $scope.searchTerm = '';
-        $scope.data = JSON.parse(localStorage.getItem('results')) || [];
+        //$scope.data = JSON.parse(localStorage.getItem('results')) || [];
+        $scope.data = [];
         $scope.loading = false;
         $scope.goingNo = [];
         // populate goingNo if there are results stored in localStorage
@@ -87,7 +88,7 @@
             // check if user is authenticated
             $http.get('/api/loggedin').success(function(user) {
                 
-                $scope.userid = user.user || 'empty';
+                $scope.userid = user.user;
                 //$scope.userid = 'empty';
                 
                 $scope.formData.id = $scope.data[index].id;
