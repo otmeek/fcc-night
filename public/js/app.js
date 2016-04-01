@@ -103,7 +103,8 @@
                             .success(function(data) {
                             
                                 // if user has added to going, remove going when clicking again
-                                $scope.data[index].going -= 1;
+                                if($scope.data[index].going - 1 >= $scope.goingNo[index])
+                                    $scope.data[index].going -= 1;
                             
                             })
                             .error(function(error) {
@@ -128,7 +129,8 @@
                                     // user has already added themselves to going, remove user
                                     $http.post('/api/removegoing', $scope.formData)
                                         .success(function(data) {
-                                            $scope.data[index].going -= 1;
+                                            if($scope.data[index].going - 1 >= $scope.goingNo[index])
+                                                $scope.data[index].going -= 1;
                                         })
                                         .error(function(error) {
                                             console.log('Error: ' + error);
