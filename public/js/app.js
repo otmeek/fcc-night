@@ -121,9 +121,11 @@
                             
                                 if(data.message == 'done') {
                                     $scope.formData = {};
-                                    $scope.data[index].going += 1;
+                                    if($scope.data[index].going + 1 <= $scope.goingNo[index] + 1)
+                                        $scope.data[index].going += 1;
                                 }
                                 else {
+                                    // user has already added themselves to going, remove user
                                     $http.post('/api/removegoing', $scope.formData)
                                         .success(function(data) {
                                             $scope.data[index].going -= 1;
