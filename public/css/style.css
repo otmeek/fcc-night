@@ -118,7 +118,6 @@ a.btn:active {
 
 
 
-
 /* footer */
 .row-footer {
     margin-top: 90px;
@@ -214,12 +213,31 @@ body {
 
 
 /* QUERIES */
+@media (max-width: 450px) {
+    .col-xs-3 {
+        width: 110px;
+    }
+    .col-xs-9 {
+        width: 310px;
+    }
+}
+
+@media (max-width: 425px) {
+    .col-xs-3 {
+        width: 110px;
+    }
+    .col-xs-9 {
+        width: 250px;
+    }
+}
+
+
 @media (max-width: 375px) {
     .col-xs-3 {
         width: 110px;
     }
     .col-xs-9 {
-        width: 260px;
+        width: 210px;
     }
 }
 

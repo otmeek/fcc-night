@@ -132,8 +132,7 @@ app.get('/api/search', function(req, res) {
 app.get('/api/getgoing/:ID', function(req, res) {
     var id = req.params.ID;
     var today = new Date().setHours(0,0,0,0);
-    console.log(today);
-    console.log(id);
+    
     Location.find({
         id: id,
         "going.going" : today
