@@ -41,7 +41,6 @@
         
         getGoing();
         
-        console.log($scope.data[0].going);
         
         $scope.getResults = function() {
             
