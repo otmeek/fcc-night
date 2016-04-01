@@ -103,6 +103,8 @@
                             .success(function(data) {
                             
                                 // if user has added to going, remove going when clicking again
+                            
+                                // these ifs prevent button spammers from bugging out the counter
                                 if($scope.data[index].going - 1 >= $scope.goingNo[index])
                                     $scope.data[index].going -= 1;
                             
